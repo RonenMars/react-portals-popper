@@ -1,0 +1,79 @@
+.ChatApp {
+    padding: 20px;
+}
+
+.Chat {
+    flex: 1;
+}
+
+.ChatMessages {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.ChatInput {
+    display: flex;
+    background-color: #fff;
+    border-radius: 20px;
+    font-size: 20px;
+    color: #000;
+    padding: 10px;
+    width: 100%;
+}
+
+.ChatMessage {
+    background-color: aquamarine;
+    border-radius: 20px;
+    color: black;
+    text-align: left;
+    padding: 10px;
+    width: 20vw;
+    flex: 1;
+    margin: 10px 0px;
+    white-space: pre-line;
+}
+
+.MyMessage {
+    background-color: darksalmon;
+    align-self: flex-end;
+}
+
+.ChatForm {
+    display: flex;
+}
+
+.ChatReplyBox {
+    height: 60px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.EmojiBarToggleTrigger {
+    height: 40px;
+    position: absolute;
+    right: 25px;
+    margin-top: 5px;
+}
+
+.ChatMessagesEmojisBar {
+    text-align: center;
+}
+
+#credit {
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    text-align: center;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
