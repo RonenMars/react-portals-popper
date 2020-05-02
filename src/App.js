@@ -1,9 +1,10 @@
-import React, {useEffect, useContext} from 'react';
-import {ChatMessagesList, ChatMessagesForm, ChatPortal} from "./components";
+import React, {useEffect, useContext, useState} from 'react';
+import {ChatMessagesList, ChatMessagesForm} from "./components";
 import {ChatFormProvider, ChatMessagesContext, ChatEmojisBarContext} from './context';
 import logo from './images/bigpanda-logo.png';
 import './App.css';
 import {emojisMapped} from "./consts";
+import {usePopper} from 'react-popper';
 
 
 const App = () => {
@@ -11,13 +12,24 @@ const App = () => {
     const {messages} = useContext(ChatMessagesContext);
     const {displayEmojis, addEmoji} = useContext(ChatEmojisBarContext);
 
-
     // Scroll on every new messages in chat
     useEffect(() => {
         chatInputRef.current.scrollIntoView({behavior: "smooth"});
     }, [messages]);
 
-    const appendedElement = document.body;
+    const [referenceElement, setReferenceElement] = useState(null);
+    const [popperElement, setPopperElement] = useState(null);
+    const {styles, attributes} = usePopper(referenceElement, popperElement, {
+        placement: 'bottom',
+        modifiers: [
+            {
+                name: 'flip',
+                options: {
+                    fallbackPlacements: ['top'],
+                },
+            },
+        ],
+    });
 
     return (<div className="App">
         <div className="ChatApp">
@@ -27,25 +39,26 @@ const App = () => {
                 <div className="ChatMessages">
                     <ChatMessagesList/>
                 </div>
-                <div className="ChatReplyBox" id="ChatText">
+                <div className="ChatReplyBox" id="ChatText" ref={setReferenceElement}>
                     <ChatFormProvider>
                         <ChatMessagesForm
                             chatInputRef={chatInputRef}
                         />
                     </ChatFormProvider>
                     <React.Fragment>
-                       <ChatPortal portalElement={appendedElement}>
-                           {
-                               displayEmojis && <div className="ChatMessagesEmojisBar">
-                                   {
-                                       emojisMapped.map((singleImage, index) => <img src={singleImage}
-                                                                                     key={index}
-                                                                                     onClick={() => addEmoji(singleImage)}
-                                                                                     alt="Panda Emoji Bar"/>)
-                                   }
-                               </div>
-                           }
-                       </ChatPortal>
+                            {
+                                displayEmojis && <div className="ChatMessagesEmojisBar"
+                                                      ref={setPopperElement}
+                                                      style={styles.popper}
+                                                      {...attributes.popper}>
+                                    {
+                                        emojisMapped.map((singleImage, index) => <img src={singleImage}
+                                                                                      key={index}
+                                                                                      onClick={() => addEmoji(singleImage)}
+                                                                                      alt="Panda Emoji Bar"/>)
+                                    }
+                                </div>
+                            }
                     </React.Fragment>
                 </div>
                 <div id="credit"> Jokes by <a href="http://www.jokes4us.com/animaljokes/pandajokes.html"
