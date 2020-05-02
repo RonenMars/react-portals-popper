@@ -4,6 +4,8 @@ import {ChatFormProvider, ChatMessagesContext, ChatEmojisBarContext} from './con
 import logo from './images/bigpanda-logo.png';
 import './App.css';
 import {emojisMapped} from "./consts";
+import ReactDOM from 'react-dom';
+
 
 const App = () => {
     const chatInputRef = React.createRef();
@@ -15,6 +17,19 @@ const App = () => {
     useEffect(() => {
         chatInputRef.current.scrollIntoView({behavior: "smooth"});
     }, [messages]);
+
+    const EmojiBar = (
+        displayEmojis && <div className="ChatMessagesEmojisBar">
+            {
+                emojisMapped.map((singleImage, index) => <img src={singleImage}
+                                                              key={index}
+                                                              onClick={() => addEmoji(singleImage)}
+                                                              alt="Panda Emoji Bar"/>)
+            }
+        </div>
+    );
+
+    const appendedElement = document.body;
 
 
     return (<div className="App">
@@ -31,16 +46,11 @@ const App = () => {
                             chatInputRef={chatInputRef}
                         />
                     </ChatFormProvider>
-                    {
-                        displayEmojis && <div className="ChatMessagesEmojisBar">
-                            {
-                                emojisMapped.map((singleImage, index) => <img src={singleImage}
-                                                                              key={index}
-                                                                              onClick={() => addEmoji(singleImage)}
-                                                                              alt="Panda Emoji Bar"/>)
-                            }
-                        </div>
-                    }
+                    <React.Fragment>
+                        {
+                            ReactDOM.createPortal(EmojiBar, appendedElement)
+                        }
+                    </React.Fragment>
                 </div>
                 <div id="credit"> Jokes by <a href="http://www.jokes4us.com/animaljokes/pandajokes.html"
                                               target="_blank">Jokes4Us.com</a></div>
