@@ -1,10 +1,9 @@
 import React, {useEffect, useContext} from 'react';
-import {ChatMessagesList, ChatMessagesForm} from "./components";
+import {ChatMessagesList, ChatMessagesForm, ChatPortal} from "./components";
 import {ChatFormProvider, ChatMessagesContext, ChatEmojisBarContext} from './context';
 import logo from './images/bigpanda-logo.png';
 import './App.css';
 import {emojisMapped} from "./consts";
-import ReactDOM from 'react-dom';
 
 
 const App = () => {
@@ -18,19 +17,7 @@ const App = () => {
         chatInputRef.current.scrollIntoView({behavior: "smooth"});
     }, [messages]);
 
-    const EmojiBar = (
-        displayEmojis && <div className="ChatMessagesEmojisBar">
-            {
-                emojisMapped.map((singleImage, index) => <img src={singleImage}
-                                                              key={index}
-                                                              onClick={() => addEmoji(singleImage)}
-                                                              alt="Panda Emoji Bar"/>)
-            }
-        </div>
-    );
-
     const appendedElement = document.body;
-
 
     return (<div className="App">
         <div className="ChatApp">
@@ -47,9 +34,18 @@ const App = () => {
                         />
                     </ChatFormProvider>
                     <React.Fragment>
-                        {
-                            ReactDOM.createPortal(EmojiBar, appendedElement)
-                        }
+                       <ChatPortal portalElement={appendedElement}>
+                           {
+                               displayEmojis && <div className="ChatMessagesEmojisBar">
+                                   {
+                                       emojisMapped.map((singleImage, index) => <img src={singleImage}
+                                                                                     key={index}
+                                                                                     onClick={() => addEmoji(singleImage)}
+                                                                                     alt="Panda Emoji Bar"/>)
+                                   }
+                               </div>
+                           }
+                       </ChatPortal>
                     </React.Fragment>
                 </div>
                 <div id="credit"> Jokes by <a href="http://www.jokes4us.com/animaljokes/pandajokes.html"
